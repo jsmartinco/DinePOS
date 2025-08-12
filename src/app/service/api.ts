@@ -1,18 +1,58 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { appendFile } from 'fs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import  CryptoJs from "crypto-js"
+EventEmitter
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
 
-  private static BASE_URL = ''
+  private static BASE_URL = '';
+  private static ENCRYPT_KEY = ""
+
+  authStatus = new EventEmitter<void>();
 
   constructor(private http: HttpClient){
 
   }
+
+  encryptstorage(key: string, value: string):void{
+    const encryptValue = CryptoJs.AES.encrypt(value, Api.ENCRYPT_KEY).toString();
+    localStorage.setItem(key, encryptValue);
+  }
+
+  private decryptStorage(key: string): string | null {
+    try {
+      const encryptValue = localStorage.getItem(key);
+      if (!encryptValue) return null
+      return CryptoJs.AES.decrypt(encryptValue, Api.ENCRYPT_KEY).toString(CryptoJs.enc.Utf8);
+    } catch (error) {
+      return null
+    }
+  }
+
+  private clearAuth(){
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+  }
+
+  logout():void{
+    this.clearAuth();
+  }
+
+  isAuthenticated(): boolean{
+    const token = this.decryptStorage("token");
+    return !!token;
+  }
+
+  isAdmin(): boolean{
+    const role = this.decryptStorage("role");
+    return role === "ADMIN"
+  }
+
   
   login(body: any): Observable<any> {
     return this.http.post(`${Api.BASE_URL}/auth/login`, body);

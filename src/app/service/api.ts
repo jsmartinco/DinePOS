@@ -10,7 +10,7 @@ EventEmitter
 })
 export class Api {
 
-  private static BASE_URL = '';
+  private static BASE_URL = 'https://wdzcl0mq-3000.aue.devtunnels.ms';
   private static ENCRYPT_KEY = ""
 
   authStatus = new EventEmitter<void>();

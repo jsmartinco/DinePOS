@@ -11,6 +11,11 @@ import { Pagination } from './pagination/pagination';
 import { Login } from './login/login';
 import { Sell } from './sell/sell';
 import { Transaction } from './transaction/transaction';
+import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
+import { Menu } from './menu/menu';
+import { Report } from './report/report';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -22,16 +27,21 @@ import { Transaction } from './transaction/transaction';
     Pagination,
     Login,
     Sell,
-    Transaction
+    Transaction,
+    Menu,
+    Report
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideClientHydration(withEventReplay())
+    provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch())
   ],
   bootstrap: [App]
 })

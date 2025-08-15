@@ -1,1 +1,43 @@
-<p>login works!</p>
+<section class="login-wrap">
+  <div class="blobs" aria-hidden="true">
+    <span class="blob lc"></span>
+    <span class="blob tu"></span>
+    <span class="blob rc"></span>
+  </div>
+
+  <form class="login-card" 
+        (ngSubmit)="onSubmit(forma)" #forma="ngForm"
+        >
+    <div class="brand">
+      <div class="mark" aria-hidden="true">DinePOS</div>
+    </div>
+
+    <div class="field">
+      <label for="username"  class="form-label">User</label>
+      <input    id="username" 
+                name="username" 
+                ngModel
+                type="text" 
+                required 
+                class="form-control"
+                placeholder="e.g. admin" 
+                is-invalid
+                class="form-control"
+                />
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <input id="password" 
+                name="password" 
+                type="password" 
+                required
+                autocomplete="current-password" 
+                ngModel
+                placeholder="••••••••" />
+    </div>
+
+    <button class="btn" type="submit">Log in</button>
+  </form>
+</section>
+

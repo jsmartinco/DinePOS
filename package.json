@@ -29,6 +29,7 @@
     "@angular/platform-server": "^20.1.0",
     "@angular/router": "^20.1.0",
     "@angular/ssr": "^20.1.5",
+    "bootstrap-icons": "^1.13.1",
     "crypto-js": "^4.2.0",
     "express": "^5.1.0",
     "ngx-toastr": "^19.0.0",

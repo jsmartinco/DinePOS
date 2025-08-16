@@ -10,14 +10,14 @@
         <li class="nav-item">
           <a routerLink="/Menu" class="nav-link active" aria-current="page">Menu</a>
         </li>
-        }@if (isAdmin()) {
+        }<!--@if (isAdmin()) {-->
         <li class="nav-item">
           <a routerLink="/products" class="nav-link" href="/products">Products</a>
         </li>
         <li class="nav-item">
           <a routerLink="/reports" class="nav-link" href="/Reports">Reports</a>
         </li>
-        }@if (!isAuthenticated()) {
+        @if (!isAuthenticated()) {
         <li class="nav-item">
           <a routerLink="/login" class="nav-link" href="/login">Login</a>
         </li>

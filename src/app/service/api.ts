@@ -10,7 +10,7 @@ EventEmitter
 })
 export class Api {
 
-  private static BASE_URL = 'https://wdzcl0mq-3000.aue.devtunnels.ms';
+  private static BASE_URL = 'https://wdzcl0mq-4567.aue.devtunnels.ms';
   private static ENCRYPT_KEY = ""
 
   authStatus = new EventEmitter<void>();
@@ -55,7 +55,10 @@ export class Api {
 
   
   login(body: any): Observable<any> {
-    return this.http.post(`${Api.BASE_URL}/auth/login`, body);
+    const response = this.http.post(`${Api.BASE_URL}/auth/login`, body);
+    console.log("Login response:", response);
+    return response
+
   }
 
   createCategory(body: any): Observable<any> {

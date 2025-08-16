@@ -9,7 +9,7 @@ import { Login } from './login/login';
 const routes: Routes = [
   { path: 'menu', component: Menu },
   { path: 'login', component: Login },
-  { path: 'products', component: Product, canActivate: [Guard], data: { requiresAdmin: true } },
+  { path: 'products', component: Product/*, canActivate: [Guard], data: { requiresAdmin: true } */},
   { path: 'reports', component: Report, canActivate: [Guard], data: { requiresAdmin: true } },
   { path: '**', pathMatch: 'full', redirectTo: 'menu' }
 

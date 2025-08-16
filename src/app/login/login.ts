@@ -21,6 +21,7 @@ export class Login {
   async onSubmit( forma: NgForm ) {
 
     if ( forma.invalid  || forma.value.username === '' || forma.value.password === '' ) {
+      console.log('Invalid form submission:', forma.value);
       this.showMessage('Please fill in all fields');
     }
     try{
@@ -33,7 +34,7 @@ export class Login {
       }
     } catch (error: any) {
       console.error('Login failed:', error);
-      this.showMessage(error?.error?.message || error.message || 'Login failed. Please try again.' + error);
+      alert(error?.error?.message || error.message || 'Login failed. Please try again.' + error);
     }
 
   }
@@ -42,7 +43,7 @@ export class Login {
     this.message = message;
     setTimeout(() => {
       this.message = null;
-    }, 3000);
+    }, 1000);
   }
 
 }

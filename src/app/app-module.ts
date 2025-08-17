@@ -4,7 +4,6 @@ import { BrowserModule, provideClientHydration, withEventReplay } from '@angular
 import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { Dashboard } from './dashboard/dashboard';
-import { Profile } from './profile/profile';
 import { Product } from './product/product';
 import { Category } from './category/category';
 import { Pagination } from './pagination/pagination';
@@ -15,13 +14,14 @@ import { HttpClientModule, provideHttpClient, withFetch } from '@angular/common/
 import { Menu } from './menu/menu';
 import { Report } from './report/report';
 import { FormsModule } from '@angular/forms';
+import { AEProduct } from './a-e-product/a-e-product';
+import { CartComponent } from './cart-component/cart-component';
 
 
 @NgModule({
   declarations: [
     App,
     Dashboard,
-    Profile,
     Product,
     Category,
     Pagination,
@@ -29,7 +29,9 @@ import { FormsModule } from '@angular/forms';
     Sell,
     Transaction,
     Menu,
-    Report
+    Report,
+    AEProduct,
+    CartComponent
   ],
   imports: [
     BrowserModule,

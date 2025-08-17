@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
 import { RouterLink , RouterOutlet, Router } from '@angular/router';
 import { Api } from './service/api';
+import { CartService } from './service/cart';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class App {
   constructor(
     private api: Api,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public cart: CartService
   ) {}
 
   isAuthenticated(): boolean {

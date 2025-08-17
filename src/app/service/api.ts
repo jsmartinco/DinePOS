@@ -1,25 +1,35 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import  CryptoJs from "crypto-js"
-EventEmitter
 
+declare global {
+  interface Window {
+    google?: any;
+    onGoogleLibraryLoad?: () => void;
+  }
+}
+
+declare const google: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class Api {
+ 
 
   private static BASE_URL = 'https://wdzcl0mq-4567.aue.devtunnels.ms';
-  private static ENCRYPT_KEY = ""
+  private static ENCRYPT_KEY = "TuClaveSuperSecreta2025!@#"
 
   authStatus = new EventEmitter<void>();
 
   constructor(private http: HttpClient){
-
+    
   }
 
   encryptstorage(key: string, value: string):void{
+    console.log("Encrypting value:", value);
+    
     const encryptValue = CryptoJs.AES.encrypt(value, Api.ENCRYPT_KEY).toString();
     localStorage.setItem(key, encryptValue);
   }
@@ -50,7 +60,7 @@ export class Api {
 
   isAdmin(): boolean{
     const role = this.decryptStorage("role");
-    return role === "ADMIN"
+    return role === "admin";
   }
 
   
@@ -65,7 +75,7 @@ export class Api {
     return this.http.post(`${Api.BASE_URL}/categories/add`,body);
   }
 
-  getAllCategory(): Observable<any> {
+  getAllCategories(): Observable<any> {
     return this.http.get(`${Api.BASE_URL}/categories/all`)
 
   }
@@ -91,7 +101,7 @@ export class Api {
 
 
   getAllProducts(): Observable<any> {
-    return this.http.get(`${Api.BASE_URL}/products/all`)
+    return this.http.get(`${Api.BASE_URL}/product/all`)
   }
 
   getProductById(id: string): Observable<any>{
@@ -102,4 +112,13 @@ export class Api {
     return this.http.delete(`${Api.BASE_URL}/products/delete/${id}`)
   }
 
+   createOrder(order: { table: number | null; items: { productID: string; qty: number; }[]; }): Observable<any> {
+    return this.http.post(`${Api.BASE_URL}/orders/create`, order);
+  }
+
+  
+
 }
+
+
+

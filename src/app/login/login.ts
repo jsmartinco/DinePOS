@@ -27,9 +27,13 @@ export class Login {
     try{
       const response: any = await firstValueFrom(
         this.api.login(forma.value));
-      if (response.status === 200) {
-        this.api.encryptstorage("token", response.body.auth_token);
-        this.api.encryptstorage("role", response.body.role);
+        console.log("Login response:", response);
+        
+      if (response.status === 'success') {
+        console.log('entro');
+        
+        this.api.encryptstorage("auth_token", response.auth_token);
+        this.api.encryptstorage("role", response.role);
         this.router.navigate(['/menu']);
       }
     } catch (error: any) {

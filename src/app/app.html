@@ -22,11 +22,17 @@
           <a routerLink="/login" class="nav-link" href="/login">Login</a>
         </li>
         }
-        @if (!isAuthenticated()) {
+        @if (isAuthenticated()) {
         <li class="nav-item">
           <a class="nav-link" (click)="logOut()">Logout</a>
         </li>
         }
+        <button class="btn btn-outline-primary position-relative" routerLink="/cart" aria-label="Cart">
+        <i class="bi bi-cart"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {{ cart.count$ | async }}
+        </span>
+      </button>
       </ul>
     </div>
   </div>

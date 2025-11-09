@@ -2,40 +2,40 @@
   <ul class="nav nav-pills justify-content-center flex-wrap gap-2">
     <li class="nav-item" *ngFor="let c of categories">
       <a class="nav-link"
-         [class.active]="activeCatId === c.categoryID"
+         [class.active]="activeCatId === c.ID"
          href="#"
-         (click)="scrollTo(c.categoryID, $event)">
-        {{ c.name }}
+         (click)="scrollTo(c.ID, $event)">
+        {{ c.categoryName }}
       </a>
     </li>
   </ul>
 </div>
 <div class="container">
   <ng-container *ngFor="let g of grouped; trackBy: trackByCatId">
-    <h3 class="h5 mt-4 mb-3" [attr.id]="'cat-' + g.category.categoryID">
-      {{ g.category.name }}
+    <h3 class="h5 mt-4 mb-3" [attr.id]="'cat-' + g.category.ID">
+      {{ g.category.categoryName }}
     </h3>
     <div class="row row-cols-1 row-cols-md-4 g-4">
       <div class="col" *ngFor="let product of g.products; trackBy: trackByProductId">
         <div class="card h-100">
-          <img [src]="">
+          <img [src]= "product.attachment"
+               [alt]="product.productName"
+               class="card-img-top object-fit-cover">
           <div class="card-body">
-            <h5 class="card-title text-truncate">{{ product.name }}</h5>
+            <h5 class="card-title text-truncate">{{ product.productName }}</h5>
             <p class="card-text small mb-2">{{ product.description }}</p>
             <p class="card-text fw-semibold mb-0">${{ product.price | number:'1.2-2' }}</p>
           </div>
           <div class="card-footer bg-white border-0 pt-0">
             <div class="d-flex justify-content-end">
-              <button class="btn btn-primary btn-sm" (click)="addToCart(product)">Add</button>
+              <button class="btn btn-primary btn-sm" (click)="addToCart(product)">Add to cart</button>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Si una categoría no tiene productos -->
       <div class="col-12" *ngIf="!g.products?.length">
         <div class="alert alert-light border small mb-0">
-          No hay productos en esta categoría.
+          There is no products in this category.
         </div>
       </div>
     </div>

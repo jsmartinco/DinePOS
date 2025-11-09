@@ -19,7 +19,7 @@ export class Api {
  
 
   private static BASE_URL = 'https://wdzcl0mq-4567.aue.devtunnels.ms';
-  private static ENCRYPT_KEY = "TuClaveSuperSecreta2025!@#"
+  private static ENCRYPT_KEY = "SecretPassword987612345"
 
   authStatus = new EventEmitter<void>();
 
@@ -29,12 +29,15 @@ export class Api {
 
   encryptstorage(key: string, value: string):void{
     console.log("Encrypting value:", value);
+    console.log("Using key:", Api.ENCRYPT_KEY);
+    
     
     const encryptValue = CryptoJs.AES.encrypt(value, Api.ENCRYPT_KEY).toString();
     localStorage.setItem(key, encryptValue);
+
   }
 
-  private decryptStorage(key: string): string | null {
+  decryptStorage(key: string): string | null {
     try {
       const encryptValue = localStorage.getItem(key);
       if (!encryptValue) return null
@@ -45,7 +48,7 @@ export class Api {
   }
 
   private clearAuth(){
-    localStorage.removeItem("token");
+    localStorage.removeItem("auth_token");
     localStorage.removeItem("role");
   }
 
@@ -54,7 +57,7 @@ export class Api {
   }
 
   isAuthenticated(): boolean{
-    const token = this.decryptStorage("token");
+    const token = this.decryptStorage("auth_token");
     return !!token;
   }
 
@@ -66,8 +69,9 @@ export class Api {
   
   login(body: any): Observable<any> {
     const response = this.http.post(`${Api.BASE_URL}/auth/login`, body);
-    console.log("Login response:", response);
     return response
+    
+    
 
   }
 
@@ -76,7 +80,12 @@ export class Api {
   }
 
   getAllCategories(): Observable<any> {
-    return this.http.get(`${Api.BASE_URL}/categories/all`)
+    const token = this.decryptStorage("auth_token");
+    return this.http.get(`${Api.BASE_URL}/category/all`,{
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    })
 
   }
 
@@ -92,16 +101,33 @@ export class Api {
   }
 
   addProduct(body: any): Observable<any>{
-    return this.http.post(`${Api.BASE_URL}/products/add`,body)
+    return this.http.post(`${Api.BASE_URL}/product/add`,body, 
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.decryptStorage("auth_token")}`
+        })
+      }
+    )
   }
 
-  updateProduct(id: string, body: any): Observable<any>{
-    return this.http.put(`${Api.BASE_URL}/products/update/${id}`,body)
+  updateProduct(body: any): Observable<any>{
+    return this.http.put(`${Api.BASE_URL}/product/update`,body,
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.decryptStorage("auth_token")}`
+        })
+      }
+    )
   }
 
 
   getAllProducts(): Observable<any> {
-    return this.http.get(`${Api.BASE_URL}/product/all`)
+     const token = this.decryptStorage("auth_token");    
+    return this.http.get(`${Api.BASE_URL}/product/all` ,{
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`
+      })
+    });
   }
 
   getProductById(id: string): Observable<any>{
@@ -109,14 +135,20 @@ export class Api {
   }
 
   deleteProduct(id: string): Observable<any>{
-    return this.http.delete(`${Api.BASE_URL}/products/delete/${id}`)
+    return this.http.delete(`${Api.BASE_URL}/products/delete/${id}`, 
+      {
+        headers: new HttpHeaders({
+          'Authorization': `Bearer ${this.decryptStorage("auth_token")}`
+        })
+      }
+    )
   }
 
    createOrder(order: { table: number | null; items: { productID: string; qty: number; }[]; }): Observable<any> {
     return this.http.post(`${Api.BASE_URL}/orders/create`, order);
   }
 
-  
+
 
 }
 

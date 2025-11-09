@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 export interface Product {
   productID: string;
-  name: string;
+  productName: string;
   description?: string;
   price: number;
   imageUrl?: string;
@@ -12,7 +12,7 @@ export interface Product {
 export interface CartItem {
   product: Product;
   qty: number;
-  subtotal: number; // price * qty
+  subtotal: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -21,7 +21,6 @@ export class CartService {
   private itemsSubject = new BehaviorSubject<CartItem[]>([]);
   items$ = this.itemsSubject.asObservable();
 
-  // contadores derivados
   private countSubject = new BehaviorSubject<number>(0);
   count$ = this.countSubject.asObservable();
 

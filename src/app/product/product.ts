@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../service/api';
 
@@ -10,17 +10,34 @@ import { Api } from '../service/api';
 })
 export class Product {
 
-  constructor(private api: Api, private router: Router) {}  
+  constructor(private api: Api, private router: Router, private chDetector: ChangeDetectorRef) {}  
 
   products: any[] = [];
   message: string = '';
   currentPage: number = 1;
-  itemsPerPage: number = 5;
-  totalPages: number = 3;
+  itemsPerPage: number =50;
+  totalPages: number = 1;
+  allProducts: any[] = [];
 
   getProducts(): void {
 
-    this.products = [
+    this.api.getAllProducts().subscribe({
+      next: (response:any) => {
+        const products = response.Data || [];
+        this.allProducts = response.Data || [];
+        this.products = [...this.allProducts];
+        this.totalPages = Math.ceil(products.length / this.itemsPerPage);
+        this.products = products.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
+        this.chDetector.detectChanges();
+      },
+      error: (error:any) => {
+        this.message = 'Error fetching products';
+        console.error('Error fetching products:', error);
+      }
+    })
+
+    
+    /*this.products = [
       { productID: '1', name: 'Product 1', price: 10, description: 'Description 1' , imageUrl : 'assets/images/chocorramo.jpg',stockQuantity: 10 , category: 'Food' },
       { productID: '2', name: 'Product 2', price: 20, description: 'Description 2' , imageUrl : 'assets/images/chocorramo.jpg',stockQuantity: 10 , category: 'Food' },
       { productID: '3', name: 'Product 3', price: 30, description: 'Description 3' , imageUrl : 'assets/images/chocorramo.jpg',stockQuantity: 10 , category: 'Food' },
@@ -35,18 +52,7 @@ export class Product {
 
     this.totalPages = Math.ceil(this.products.length / this.itemsPerPage);
     this.products = this.products.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-
-    /*this.api.getAllProducts().subscribe({
-      next: (response:any) => {
-        const products = response.products || [];
-        this.totalPages = Math.ceil(products.length / this.itemsPerPage);
-        this.products = products.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage);
-      },
-      error: (error:any) => {
-        this.message = 'Error fetching products';
-        console.error('Error fetching products:', error);
-      }
-    })*/
+*/
   }
 
   ngOnInit(): void {
@@ -55,7 +61,7 @@ export class Product {
 
   onPageChange(page: number): void {
     this.currentPage = page;
-    this.getProducts();
+    //this.getProducts();
   }
 
   onDeleteProduct(productId: string): void {
@@ -86,18 +92,18 @@ export class Product {
 
   searchTerm: string = '';
 
-onSearch(): void {
-  // Filtra los productos por nombre, descripción o categoría
-  const term = this.searchTerm.trim().toLowerCase();
-  if (term) {
-    this.products = this.products.filter(p =>
-      p.name.toLowerCase().includes(term) ||
-      p.description.toLowerCase().includes(term) ||
-      p.category.toLowerCase().includes(term)
-    );
-  } else {
-    this.getProducts();
+  onSearch(): void {
+    const term = this.searchTerm.trim().toLowerCase();
+    console.log('Searched term:', term);
+    
+    if (term) {
+      this.products = this.allProducts.filter(p =>
+        p.productName.toLowerCase().includes(term) ||
+        p.description.toLowerCase().includes(term) 
+      );
+    } else {
+      this.products = [...this.allProducts];
+    }
   }
-}
 
 }
